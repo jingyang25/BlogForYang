@@ -50,4 +50,15 @@ public class UserLoginMark {
     public void setAction(String action) {
         this.action = action == null ? null : action.trim();
     }
+
+    @Override
+    public String toString() {
+        return "UserLoginMark{" +
+                "id=" + id +
+                ", userid='" + userid + '\'' +
+                ", logintime='" + logintime + '\'' +
+                ", loginip='" + loginip + '\'' +
+                ", action='" + action + '\'' +
+                '}';
+    }
 }

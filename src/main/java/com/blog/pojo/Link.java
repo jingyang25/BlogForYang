@@ -40,4 +40,15 @@ public class Link {
     public void setSort(String sort) {
         this.sort = sort == null ? null : sort.trim();
     }
+
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "id=" + id +
+                ", linkname='" + linkname + '\'' +
+                ", url='" + url + '\'' +
+                ", sort='" + sort + '\'' +
+                '}';
+    }
 }

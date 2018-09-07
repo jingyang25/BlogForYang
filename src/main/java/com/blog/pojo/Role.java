@@ -30,4 +30,13 @@ public class Role {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", rolename='" + rolename + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

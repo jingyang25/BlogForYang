@@ -1,6 +1,6 @@
 package com.blog.pojo;
 
-public class Userinfo {
+public class UserInfo {
     private Integer id;
 
     private String username;
@@ -59,5 +59,17 @@ public class Userinfo {
 
     public void setUsertype(Integer usertype) {
         this.usertype = usertype;
+    }
+
+    @Override
+    public String toString() {
+        return "Userinfo{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", status=" + status +
+                ", usertype=" + usertype +
+                '}';
     }
 }

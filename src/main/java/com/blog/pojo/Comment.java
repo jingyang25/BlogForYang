@@ -50,4 +50,15 @@ public class Comment {
     public void setAccessid(String accessid) {
         this.accessid = accessid == null ? null : accessid.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", blogid='" + blogid + '\'' +
+                ", content='" + content + '\'' +
+                ", createtime='" + createtime + '\'' +
+                ", accessid='" + accessid + '\'' +
+                '}';
+    }
 }

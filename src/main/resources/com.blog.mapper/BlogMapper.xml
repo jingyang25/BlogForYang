@@ -1,275 +1,198 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.blog.mapper.BlogMapper" >
-  <resultMap id="BaseResultMap" type="com.blog.pojo.Blog" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="typeId" property="typeid" jdbcType="VARCHAR" />
-    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
-    <result column="sort" property="sort" jdbcType="VARCHAR" />
-    <result column="imgId" property="imgid" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="clickVolume" property="clickvolume" jdbcType="VARCHAR" />
-    <result column="createTime" property="createtime" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
+    <resultMap id="BaseResultMap" type="com.blog.pojo.Blog" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="typeId" property="typeid" jdbcType="VARCHAR" />
+        <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="VARCHAR" />
+        <result column="imgId" property="imgid" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
+        <result column="clickVolume" property="clickvolume" jdbcType="VARCHAR" />
+        <result column="createTime" property="createtime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
     id, title, typeId, keywords, sort, imgId, content, clickVolume, createTime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.blog.pojo.BlogExample" >
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from blog
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
+    *
     from blog
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+
+    <select id="selectLastBlog" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    id,title
+    from blog
+    where id &lt; #{id,jdbcType=INTEGER} ORDER BY id desc limit 1;
+  </select>
+
+    <select id="selectNextBlog" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    id,title
+    from blog
+    where id &gt; #{id,jdbcType=INTEGER} ORDER BY id ASC limit 1;
+  </select>
+
+
+
+    <select id="selectByWord" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    *
+    from blog
+    where title LIKE CONCAT(CONCAT('%', #{word}), '%') OR content  LIKE CONCAT(CONCAT('%', #{word}), '%')
+  </select>
+
+    <select id="queryAll" resultMap="BaseResultMap"  >
+    select *
+    from blog
+    ORDER BY id DESC
+  </select>
+
+    <select id="countAllNum" resultType="java.lang.Integer">
+    SELECT count(*) FROM article
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from blog
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.blog.pojo.BlogExample" >
-    delete from blog
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.blog.pojo.Blog" >
-    insert into blog (id, title, typeId, 
-      keywords, sort, imgId, 
+
+    <insert id="insert" parameterType="com.blog.pojo.Blog" >
+    insert into blog (id, title, typeId,
+      keywords, sort, imgId,
       content, clickVolume, createTime
       )
-    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR}, 
-      #{keywords,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{imgid,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR}, #{clickvolume,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR},
+      #{keywords,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, #{imgid,jdbcType=VARCHAR},
+      #{content,jdbcType=LONGVARCHAR}, #{clickvolume,jdbcType=VARCHAR}, #{createtime,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.blog.pojo.Blog" >
-    insert into blog
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="typeid != null" >
-        typeId,
-      </if>
-      <if test="keywords != null" >
-        keywords,
-      </if>
-      <if test="sort != null" >
-        sort,
-      </if>
-      <if test="imgid != null" >
-        imgId,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="clickvolume != null" >
-        clickVolume,
-      </if>
-      <if test="createtime != null" >
-        createTime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="typeid != null" >
-        #{typeid,jdbcType=VARCHAR},
-      </if>
-      <if test="keywords != null" >
-        #{keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="sort != null" >
-        #{sort,jdbcType=VARCHAR},
-      </if>
-      <if test="imgid != null" >
-        #{imgid,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="clickvolume != null" >
-        #{clickvolume,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        #{createtime,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.blog.pojo.BlogExample" resultType="java.lang.Integer" >
-    select count(*) from blog
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update blog
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.title != null" >
-        title = #{record.title,jdbcType=VARCHAR},
-      </if>
-      <if test="record.typeid != null" >
-        typeId = #{record.typeid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keywords != null" >
-        keywords = #{record.keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sort != null" >
-        sort = #{record.sort,jdbcType=VARCHAR},
-      </if>
-      <if test="record.imgid != null" >
-        imgId = #{record.imgid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.content != null" >
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
-      <if test="record.clickvolume != null" >
-        clickVolume = #{record.clickvolume,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createtime != null" >
-        createTime = #{record.createtime,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update blog
-    set id = #{record.id,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      typeId = #{record.typeid,jdbcType=VARCHAR},
-      keywords = #{record.keywords,jdbcType=VARCHAR},
-      sort = #{record.sort,jdbcType=VARCHAR},
-      imgId = #{record.imgid,jdbcType=VARCHAR},
-      content = #{record.content,jdbcType=VARCHAR},
-      clickVolume = #{record.clickvolume,jdbcType=VARCHAR},
-      createTime = #{record.createtime,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.blog.pojo.Blog" >
-    update blog
-    <set >
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="typeid != null" >
-        typeId = #{typeid,jdbcType=VARCHAR},
-      </if>
-      <if test="keywords != null" >
-        keywords = #{keywords,jdbcType=VARCHAR},
-      </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=VARCHAR},
-      </if>
-      <if test="imgid != null" >
-        imgId = #{imgid,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="clickvolume != null" >
-        clickVolume = #{clickvolume,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        createTime = #{createtime,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.blog.pojo.Blog" >
+
+    <insert id="insertSelective" parameterType="com.blog.pojo.Blog" >
+        insert into blog
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="typeid != null" >
+                typeId,
+            </if>
+            <if test="keywords != null" >
+                keywords,
+            </if>
+            <if test="sort != null" >
+                sort,
+            </if>
+            <if test="imgid != null" >
+                imgId,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="clickvolume != null" >
+                clickVolume,
+            </if>
+            <if test="createtime != null" >
+                createTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="typeid != null" >
+                #{typeid,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null" >
+                #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null" >
+                #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="imgid != null" >
+                #{imgid,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="clickvolume != null" >
+                #{clickvolume,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                #{createtime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.blog.pojo.Blog" >
+        update article
+        <set >
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null" >
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="desci != null" >
+                desci = #{desci,jdbcType=VARCHAR},
+            </if>
+            <if test="pic != null" >
+                pic = #{pic,jdbcType=VARCHAR},
+            </if>
+            <if test="click != null" >
+                click = #{click,jdbcType=INTEGER},
+            </if>
+            <if test="time != null" >
+                time = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="catalogId != null" >
+                catalog_id = #{catalogId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blog.pojo.Blog" >
     update blog
     set title = #{title,jdbcType=VARCHAR},
       typeId = #{typeid,jdbcType=VARCHAR},
       keywords = #{keywords,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=VARCHAR},
       imgId = #{imgid,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR},
       clickVolume = #{clickvolume,jdbcType=VARCHAR},
       createTime = #{createtime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.blog.pojo.Blog" >
+    update blog
+    set title = #{title,jdbcType=VARCHAR},
+      typeId = #{typeid,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      imgId = #{imgid,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR},
+      clickVolume = #{clickvolume,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
 </mapper>

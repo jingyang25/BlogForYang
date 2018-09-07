@@ -1,6 +1,7 @@
 package com.blog.pojo;
 
 public class UserRole {
+
     private Integer id;
 
     private String userid;
@@ -29,5 +30,14 @@ public class UserRole {
 
     public void setRoleid(String roleid) {
         this.roleid = roleid == null ? null : roleid.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "id=" + id +
+                ", userid='" + userid + '\'' +
+                ", roleid='" + roleid + '\'' +
+                '}';
     }
 }

@@ -60,4 +60,16 @@ public class Image {
     public void setClickvolume(String clickvolume) {
         this.clickvolume = clickvolume == null ? null : clickvolume.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", imgname='" + imgname + '\'' +
+                ", imgurl='" + imgurl + '\'' +
+                ", content='" + content + '\'' +
+                ", uploadtime='" + uploadtime + '\'' +
+                ", clickvolume='" + clickvolume + '\'' +
+                '}';
+    }
 }

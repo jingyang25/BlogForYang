@@ -80,4 +80,18 @@ public class Permission {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "pid=" + pid +
+                ", pname='" + pname + '\'' +
+                ", purl='" + purl + '\'' +
+                ", percode='" + percode + '\'' +
+                ", type='" + type + '\'' +
+                ", parentid='" + parentid + '\'' +
+                ", sort='" + sort + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

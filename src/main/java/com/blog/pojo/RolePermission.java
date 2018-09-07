@@ -30,4 +30,13 @@ public class RolePermission {
     public void setPerid(String perid) {
         this.perid = perid == null ? null : perid.trim();
     }
+
+    @Override
+    public String toString() {
+        return "RolePermission{" +
+                "id=" + id +
+                ", userid='" + userid + '\'' +
+                ", perid='" + perid + '\'' +
+                '}';
+    }
 }

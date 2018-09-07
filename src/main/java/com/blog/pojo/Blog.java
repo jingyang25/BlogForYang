@@ -1,6 +1,7 @@
 package com.blog.pojo;
 
 public class Blog {
+
     private Integer id;
 
     private String title;
@@ -15,7 +16,7 @@ public class Blog {
 
     private String content;
 
-    private String clickvolume;
+    private int clickvolume;
 
     private String createtime;
 
@@ -75,12 +76,12 @@ public class Blog {
         this.content = content == null ? null : content.trim();
     }
 
-    public String getClickvolume() {
+    public int getClickvolume() {
         return clickvolume;
     }
 
-    public void setClickvolume(String clickvolume) {
-        this.clickvolume = clickvolume == null ? null : clickvolume.trim();
+    public void setClickvolume(int clickvolume) {
+        this.clickvolume = clickvolume;
     }
 
     public String getCreatetime() {
@@ -89,5 +90,20 @@ public class Blog {
 
     public void setCreatetime(String createtime) {
         this.createtime = createtime == null ? null : createtime.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Blog{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", typeid='" + typeid + '\'' +
+                ", keywords='" + keywords + '\'' +
+                ", sort='" + sort + '\'' +
+                ", imgid='" + imgid + '\'' +
+                ", content='" + content + '\'' +
+                ", clickvolume='" + clickvolume + '\'' +
+                ", createtime='" + createtime + '\'' +
+                '}';
     }
 }

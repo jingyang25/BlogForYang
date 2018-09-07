@@ -30,4 +30,14 @@ public class UserRelation {
     public void setUserreid(String userreid) {
         this.userreid = userreid == null ? null : userreid.trim();
     }
+
+
+    @Override
+    public String toString() {
+        return "UserRelation{" +
+                "id=" + id +
+                ", userid='" + userid + '\'' +
+                ", userreid='" + userreid + '\'' +
+                '}';
+    }
 }
